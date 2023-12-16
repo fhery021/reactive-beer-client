@@ -3,13 +3,11 @@ package com.fhery021.reactivebeerclient.web;
 
 import com.fhery021.reactivebeerclient.client.BeerClient;
 import com.fhery021.reactivebeerclient.model.BeerDto;
+import com.fhery021.reactivebeerclient.model.BeerPagedList;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import java.util.UUID;
@@ -26,4 +24,15 @@ public class BeerController {
     public Mono<BeerDto> getBeerById(@PathVariable String id) {
         return beerClient.getBeerById(UUID.fromString(id), false);
     }
+
+    @GetMapping("/list")
+    public Mono<BeerPagedList> list(@RequestParam(required = false) Integer pageNumber,
+                                    @RequestParam(required = false) Integer pageSize,
+                                    @RequestParam(required = false) String beerName,
+                                    @RequestParam(required = false) String beerStyle,
+                                    @RequestParam(required = false) Boolean showInventoryOnhand) {
+        return beerClient.listBeers(pageNumber, pageSize, beerName, beerStyle, showInventoryOnhand);
+    }
+
+
 }
